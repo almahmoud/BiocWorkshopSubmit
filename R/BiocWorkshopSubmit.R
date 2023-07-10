@@ -21,7 +21,7 @@ appCSS <- ".mandatory_star { color: red; }"
 #' Prepare a Bioconductor Workshop Submission
 #'
 #' @import shiny
-#' @importFrom shinyjs useShinyjs inlineCSS toggleState
+#' @importFrom shinyjs useShinyjs inlineCSS toggleState hidden hide reset show
 #' @importFrom shinyAce aceEditor updateAceEditor
 #'
 #' @export
@@ -60,6 +60,12 @@ BiocWorkshopSubmit <- function(...) {
                         textInput("url", mandatory("Container URL")),
                         textInput("tag", "Container Tag", "latest"),
                         actionButton("submit", "Submit", class = "btn-primary")
+                    ),
+                    hidden(
+                        div(
+                            id = "thankyou_msg",
+                            h3("Your response was submitted successfully!")
+                        )
                     ),
                     width = 5
                 )
@@ -106,6 +112,9 @@ BiocWorkshopSubmit <- function(...) {
                 "code",
                 value = .workshop_template(.data = fdata)
             )
+            reset("form")
+            hide("form")
+            show("thankyou_msg")
         })
     }
 
