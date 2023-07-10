@@ -1,0 +1,21 @@
+Package: BiocWorkshopSubmit
+Type: Package
+Title: Provides a shiny app for workshop submissions
+Version: 0.99.0
+Authors@R: person(
+  "Marcel", "Ramos", , "marcel.ramosperez@roswellpark.org",
+  c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
+  )
+Description: The package provides a form interface for submitting workshops
+  via a shiny app. It requires a GitHub organization token for creating a
+  comment on the Bioconductor/workshop-contributions repository. The
+  package creates an issue and comments with the appropriate data from the
+  form.
+License: Artistic-2.0
+Imports:
+  BiocBaseUtils,
+  S4Vectors,
+  shinyjs,
+  shiny
+Encoding: UTF-8
+RoxygenNote: 7.2.3
