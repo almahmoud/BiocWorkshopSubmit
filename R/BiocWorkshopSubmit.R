@@ -1,3 +1,6 @@
+# Code adapted from
+# https://deanattali.com/2015/06/14/mimicking-google-form-shiny/
+
 .TEMPLATE_FORM <- paste(
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
