@@ -64,7 +64,7 @@ BiocWorkshopSubmit <- function(...) {
                             "section", mandatory("Section"), "e.g. Bioc2023"
                         ),
                         textInput("description", "Description"),
-                        textInput("ghrepo", mandatory("GitHub/Repository")),
+                        textInput("ghrepo", mandatory("GitHub Repository")),
                         textInput("startfile", "Start File", "README.md"),
                         textInput("url", mandatory("Container URL")),
                         textInput("tag", "Container Tag", "latest"),
