@@ -16,13 +16,15 @@ mandatory <- function(label) {
     )
 }
 
-appCSS <- ".mandatory_star { color: red; }"
+appCSS <- paste(
+    ".mandatory_star { color: red; }", "#error { color: red; }", sep = "\n"
+)
 
 #' Prepare a Bioconductor Workshop Submission
 #'
 #' @import shiny
 #' @importFrom shinyjs useShinyjs inlineCSS toggleState hidden hide reset show
-#'   disable
+#'   disable enable html
 #' @importFrom shinyAce aceEditor updateAceEditor
 #'
 #' @export
@@ -52,7 +54,7 @@ BiocWorkshopSubmit <- function(...) {
                         id = "prepop",
                         textInput("prepop", "Existing GitHub Repository"),
                         actionButton(
-                            "presubmit", "Submit", class = "btn-primary"
+                            "presubmit", "Populate", class = "btn-primary"
                         )
                     ),
                     br(),
@@ -68,12 +70,20 @@ BiocWorkshopSubmit <- function(...) {
                         textInput("startfile", "Start File", "README.md"),
                         textInput("url", mandatory("Container URL")),
                         textInput("tag", "Container Tag", "latest"),
-                        actionButton("submit", "Submit", class = "btn-primary")
+                        actionButton("submit", "Render", class = "btn-primary")
                     ),
                     hidden(
                         div(
                             id = "thankyou_msg",
                             h3("Your response was submitted successfully!")
+                        )
+                    ),
+                    hidden(
+                        span(id = "submit_msg", "Submitting..."),
+                        div(id = "error",
+                            div(
+                                br(), tags$b("Error: "), span(id = "error_msg")
+                            )
                         )
                     ),
                     width = 5
@@ -111,13 +121,20 @@ BiocWorkshopSubmit <- function(...) {
                 logical(1)
             )
             mandatoryFilled <- all(mandatoryFilled)
-
             # enable/disable the submit button
             toggleState(id = "submit", condition = mandatoryFilled)
         })
         formData <- reactive({
             data <- vapply(fieldsAll, function(x) input[[x]], character(1L))
-            as.data.frame(t(data))
+            resform <- as.data.frame(t(data))
+            if (identical(resform[["id"]], "abc123"))
+                stop("Provide a valid and unique identifier (id)")
+            if (identical(resform[["section"]], "e.g. Bioc2023"))
+                stop(
+                    "Provide an appropriate Section;",
+                    " see examples at workshop.bioconductor.org"
+                )
+            resform
         })
         output$ace_input <- renderUI({
             aceEditor(
@@ -127,15 +144,27 @@ BiocWorkshopSubmit <- function(...) {
             )
         })
         observeEvent(input$submit, {
-            fdata <- formData()
-            updateAceEditor(
-                session,
-                "code",
-                value = .workshop_template(.data = fdata)
+            tryCatch({
+                fdata <- formData()
+                updateAceEditor(
+                    session,
+                    "code",
+                    value = .workshop_template(.data = fdata)
+                )
+                reset("form")
+                hide("form")
+                hide("error")
+                show("thankyou_msg")
+                },
+                error = function(e) {
+                    html("error_msg", e$message)
+                    show(id = "error", anim = TRUE, animType = "fade")
+                },
+                finally = {
+                    enable("submit")
+                    hide("submit_msg")
+                }
             )
-            reset("form")
-            hide("form")
-            show("thankyou_msg")
         })
     }
 
