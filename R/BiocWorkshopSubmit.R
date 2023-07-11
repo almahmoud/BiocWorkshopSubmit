@@ -22,6 +22,7 @@ appCSS <- ".mandatory_star { color: red; }"
 #'
 #' @import shiny
 #' @importFrom shinyjs useShinyjs inlineCSS toggleState hidden hide reset show
+#'   disable
 #' @importFrom shinyAce aceEditor updateAceEditor
 #'
 #' @export
@@ -47,6 +48,14 @@ BiocWorkshopSubmit <- function(...) {
         sidebarLayout(
             div(class = "sidebar",
                 sidebarPanel(
+                    div(
+                        id = "prepop",
+                        textInput("prepop", "Existing GitHub Repository"),
+                        actionButton(
+                            "presubmit", "Submit", class = "btn-primary"
+                        )
+                    ),
+                    br(),
                     div(
                         id = "form",
                         textInput("id", mandatory("id"), "abc123"),
@@ -80,6 +89,18 @@ BiocWorkshopSubmit <- function(...) {
     ) # end fluidPage
 
     server <- function(input, output, session) {
+        observeEvent(input$presubmit, {
+            ghrepo <- input[["prepop"]]
+            updateTextInput(session, "ghrepo", value = ghrepo)
+            descfile <- read_gh_file(ghrepo)
+            title <- descfile[, "Title"]
+            updateTextInput(session, "title", value = unname(title))
+            description <- descfile[, "Description"]
+            updateTextInput(session, "description", value = unname(description))
+            url <- .dcf_parse_url(descfile[, "URL"])
+            updateTextInput(session, "url", value = unname(url))
+            disable(id = "presubmit")
+        })
         observe({
             # check if all mandatory fields have a value
             mandatoryFilled <- vapply(
