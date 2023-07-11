@@ -120,7 +120,7 @@ BiocWorkshopSubmit <- function(...) {
             as.data.frame(t(data))
         })
         output$ace_input <- renderUI({
-            shinyAce::aceEditor(
+            aceEditor(
                 outputId = "code",
                 value = "",
                 height = "380px", fontSize = 18, mode = "r"
@@ -128,7 +128,7 @@ BiocWorkshopSubmit <- function(...) {
         })
         observeEvent(input$submit, {
             fdata <- formData()
-            shinyAce::updateAceEditor(
+            updateAceEditor(
                 session,
                 "code",
                 value = .workshop_template(.data = fdata)

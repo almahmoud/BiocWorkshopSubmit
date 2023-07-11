@@ -1,7 +1,10 @@
+#' @importFrom rjsoncons jmespath
+#' @importFrom utils download.file
+#' @importFrom gh gh
 read_gh_file <- function(ghrepo) {
     ghrepo <- unlist(strsplit(ghrepo, "/", fixed = TRUE))
     names(ghrepo) <- c("owner", "repo")
-    res <- gh::gh(
+    res <- gh(
         "/repos/{owner}/{repo}/contents/{path}",
         owner = ghrepo["owner"],
         repo = ghrepo["repo"],
