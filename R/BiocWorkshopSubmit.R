@@ -157,11 +157,6 @@ BiocWorkshopSubmit <- function(...) {
             resform <- as.data.frame(t(data))
             if (identical(resform[["id"]], "abc123"))
                 stop("Provide a valid and unique identifier (id)")
-            if (identical(resform[["section"]], "e.g. Bioc2023"))
-                stop(
-                    "Provide an appropriate Section;",
-                    " see examples at workshop.bioconductor.org"
-                )
             resform
         })
         output$ace_input <- renderUI({
