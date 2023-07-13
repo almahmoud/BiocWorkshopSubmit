@@ -55,7 +55,11 @@ BiocWorkshopSubmit <- function(...) {
                 sidebarPanel(
                     div(
                         id = "prepop",
-                        textInput("prepop", "Existing GitHub Repository"),
+                        textInput(
+                            inputId = "prepop",
+                            label = "Existing GitHub Repository",
+                            placeholder = "username/repository"
+                        ),
                         actionButton(
                             "presubmit", "Populate", class = "btn-primary"
                         )
@@ -63,16 +67,26 @@ BiocWorkshopSubmit <- function(...) {
                     br(),
                     div(
                         id = "form",
-                        textInput("id", mandatory("id"), "abc123"),
-                        textInput("title", mandatory("Title")),
                         textInput(
-                            "section", mandatory("Section"), "e.g. Bioc2023"
+                            "id", mandatory("id"), placeholder = "abc123"
+                        ),
+                        textInput(
+                            "title",
+                            label = mandatory("Title"),
+                            placeholder = "A Bioconductor Workshop Title"
+                        ),
+                        textInput(
+                            "section",
+                            label = mandatory("Section"),
+                            placeholder = "BioC2023"
                         ),
                         textInput("description", "Description"),
                         textInput("ghrepo", mandatory("GitHub Repository")),
-                        textInput("startfile", "Start File", "README.md"),
+                        textInput(
+                            "startfile", "Start File", value = "README.md"
+                        ),
                         textInput("url", mandatory("Container URL")),
-                        textInput("tag", "Container Tag", "latest"),
+                        textInput("tag", "Container Tag", value = "latest"),
                         actionButton("submit", "Render", class = "btn-primary")
                     ),
                     hidden(
