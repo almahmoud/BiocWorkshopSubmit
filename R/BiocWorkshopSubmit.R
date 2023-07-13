@@ -68,7 +68,9 @@ BiocWorkshopSubmit <- function(...) {
                     div(
                         id = "form",
                         textInput(
-                            "id", mandatory("id"), placeholder = "abc123"
+                            "id",
+                            mandatory("Workshop ID"),
+                            placeholder = "abc123"
                         ),
                         textInput(
                             "title",
@@ -80,12 +82,21 @@ BiocWorkshopSubmit <- function(...) {
                             label = mandatory("Section"),
                             placeholder = "BioC2023"
                         ),
+                        ## TODO: point out workshop.bioconductor.org examples
                         textInput("description", "Description"),
-                        textInput("ghrepo", mandatory("GitHub Repository")),
+                        textInput(
+                            "ghrepo",
+                            label = mandatory("GitHub Repository"),
+                            placeholder = "username/repository"
+                        ),
                         textInput(
                             "startfile", "Start File", value = "README.md"
                         ),
-                        textInput("url", mandatory("Container URL")),
+                        textInput(
+                            "url",
+                            label = mandatory("Container URL"),
+                            placeholder = "ghcr.io/username/repo"
+                        ),
                         textInput("tag", "Container Tag", value = "latest"),
                         actionButton("submit", "Render", class = "btn-primary")
                     ),
