@@ -133,9 +133,9 @@ BiocWorkshopSubmit <- function(...) {
             descfile <- read_gh_file(ghrepo)
             title <- descfile[, "Title"]
             updateTextInput(session, "title", value = unname(title))
-            description <- descfile[, "Description"]
+            description <- .parse_description(descfile)
             updateTextInput(session, "description", value = unname(description))
-            url <- .dcf_parse_url(descfile[, "URL"])
+            url <- .dcf_parse_url(descfile)
             updateTextInput(session, "url", value = unname(url))
             disable(id = "presubmit")
         })

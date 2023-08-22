@@ -15,7 +15,14 @@ read_gh_file <- function(ghrepo) {
     read.dcf(desc)
 }
 
-.dcf_parse_url <- function(urlfield) {
+.dcf_parse_url <- function(descfile) {
+    urlfield <- descfile[, "URL"]
     urls <- unlist(strsplit(urlfield, ","))
     urls[grepl("ghcr|docker", urls)]
+}
+
+.parse_description <- function(descfile) {
+    description <- descfile[, "Description"]
+    description <- gsub("\n", " ", description)
+    head(strsplit(description, "\\.")[[1L]], 1L)
 }
