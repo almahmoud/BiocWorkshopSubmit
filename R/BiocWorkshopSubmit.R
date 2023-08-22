@@ -5,7 +5,7 @@
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
     'startfile="{{startfile}}"', 'source="{{ghrepo}}"',
-    'docker="{{url}}:{{tag}}"', sep = "\n"
+    'docker="{{url}}:{{tag}}"'
 )
 
 .workshop_template <- function(.data) {
