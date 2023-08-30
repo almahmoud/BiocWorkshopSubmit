@@ -1,15 +1,20 @@
 # Code adapted from
 # https://deanattali.com/2015/06/14/mimicking-google-form-shiny/
 
-.TEMPLATE_FORM <- paste(
+.TEMPLATE_FORM <- c(
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
     'startfile="{{startfile}}"', 'source="{{ghrepo}}"',
     'docker="{{url}}:{{tag}}"'
 )
 
-.workshop_template <- function(.data) {
-    whisker::whisker.render(.TEMPLATE_FORM, data = .data)
+.ISSUE_GH_REPO <- "Bioconductor/workshop-contributions"
+
+.workshop_template <- function(.data, sep = "\n") {
+    whisker::whisker.render(
+        paste(.TEMPLATE_FORM, collapse = sep),
+        data = .data
+    )
 }
 
 mandatory <- function(label) {
@@ -22,6 +27,9 @@ mandatory <- function(label) {
 appCSS <- paste(
     ".mandatory_star { color: red; }", "#error { color: red; }", sep = "\n"
 )
+
+.ISSUE_BTN_CSS <-
+    "color: #fff; background-color; #337ab7; border-color: #2e6da4"
 
 #' Prepare a Bioconductor Workshop Submission
 #'
@@ -98,12 +106,23 @@ BiocWorkshopSubmit <- function(...) {
                             placeholder = "ghcr.io/username/repo"
                         ),
                         textInput("tag", "Container Tag", value = "latest"),
-                        actionButton("submit", "Render", class = "btn-primary")
+                        actionButton("render", "Render", class = "btn-primary")
+                    ),
+                    hidden(
+                        div(
+                            id = "render_msg",
+                            h3("Review the GitHub issue comment on the right"),
+                            actionButton(
+                                "post", "Create Issue", icon("paper-plane"),
+                                style = .ISSUE_BTN_CSS,
+                                class = "btn-danger"
+                            )
+                        )
                     ),
                     hidden(
                         div(
                             id = "thankyou_msg",
-                            h3("Your response was submitted successfully!")
+                            h3("Submitted successfully!")
                         )
                     ),
                     hidden(
@@ -149,8 +168,8 @@ BiocWorkshopSubmit <- function(...) {
                 logical(1)
             )
             mandatoryFilled <- all(mandatoryFilled)
-            # enable/disable the submit button
-            toggleState(id = "submit", condition = mandatoryFilled)
+            # enable/disable the render button
+            toggleState(id = "render", condition = mandatoryFilled)
         })
         formData <- reactive({
             data <- vapply(fieldsAll, function(x) input[[x]], character(1L))
@@ -166,28 +185,50 @@ BiocWorkshopSubmit <- function(...) {
                 height = "380px", fontSize = 18, mode = "r"
             )
         })
-        observeEvent(input$submit, {
+        observeEvent(input$render, {
             tryCatch({
                 fdata <- formData()
+                gh_comment <- .workshop_template(.data = fdata)
                 updateAceEditor(
                     session,
                     "code",
-                    value = .workshop_template(.data = fdata)
+                    value = gh_comment
                 )
-                reset("form")
+                # reset("form")
                 hide("form")
                 hide("error")
-                show("thankyou_msg")
+                show("render_msg")
+                hide("presubmit")
                 },
                 error = function(e) {
                     html("error_msg", e$message)
                     show(id = "error", anim = TRUE, animType = "fade")
                 },
                 finally = {
-                    enable("submit")
+                    enable("render")
                     hide("submit_msg")
                 }
             )
+        })
+        observeEvent(input$post, {
+            tryCatch({
+                fdata <- formData()
+                gh_comment <- .workshop_template(.data = fdata, sep = " ")
+                ghrepo <- .ISSUE_GH_REPO
+                issue_title <- paste0(
+                    "[", fdata[["section"]], "] ", fdata[["title"]]
+                )
+                create_gh_issue(
+                    ghrepo = ghrepo,
+                    title = issue_title,
+                    body = gh_comment
+                )
+                hide("render_msg")
+                show("thankyou_msg")
+            }, error = function(e) {
+                html("error_msg", e$message)
+                show(id = "error", anim = TRUE, animType = "fade")
+            })
         })
     }
 

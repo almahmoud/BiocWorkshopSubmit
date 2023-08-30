@@ -26,3 +26,15 @@ read_gh_file <- function(ghrepo) {
     description <- gsub("\n", " ", description)
     head(strsplit(description, "\\.")[[1L]], 1L)
 }
+
+create_gh_issue <- function(ghrepo, title, body) {
+    ghrepo <- unlist(strsplit(ghrepo, "/", fixed = TRUE))
+    names(ghrepo) <- c("owner", "repo")
+    gh(
+        "POST /repos/{owner}/{repo}/issues",
+        owner = ghrepo["owner"],
+        repo = ghrepo["repo"],
+        title = jsonlite::unbox(title),
+        body = jsonlite::unbox(body)
+    )
+}
