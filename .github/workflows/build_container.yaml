@@ -50,10 +50,10 @@ jobs:
       - name: Generate wrapper
         run: |
           cp .github/scripts/galaxy-wrapper-template.xml galaxy-wrapper.xml
-          sed -i 's/{{{CONTAINER}}}/${{steps.vars.outputs.container}}/g' galaxy-wrapper.xml
-          sed -i 's/{{{SOURCE}}}/${{steps.vars.outputs.source}}/g' galaxy-wrapper.xml
-          sed -i 's/{{{NAME}}}/${{steps.vars.outputs.name}}/g' galaxy-wrapper.xml
-          sed -i 's/{{{ID}}}/${{steps.vars.outputs.id}}/g' galaxy-wrapper.xml
+          sed -i 's#{{{CONTAINER}}}#${{steps.vars.outputs.container}}#g' galaxy-wrapper.xml
+          sed -i 's#{{{SOURCE}}}#${{steps.vars.outputs.source}}#g' galaxy-wrapper.xml
+          sed -i 's#{{{NAME}}}#${{steps.vars.outputs.name}}#g' galaxy-wrapper.xml
+          sed -i 's#{{{ID}}}#${{steps.vars.outputs.id}}#g' galaxy-wrapper.xml
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name github-actions
           git config user.email github-actions@github.com
