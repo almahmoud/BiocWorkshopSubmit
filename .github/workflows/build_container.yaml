@@ -1,4 +1,4 @@
-name: Build shiny Docker image
+name: Build shiny Docker image and generate Galaxy wrapper
 on:
   workflow_dispatch: {}
   push: {}
@@ -38,3 +38,25 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
 
+      - name: Set variables
+        id: vars
+        run: |
+          echo "container=${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
+          echo "source=https://github.com/${{github.repository}}" >> $GITHUB_OUTPUT
+          NAME="$(echo '${{github.repository}}' | awk -F'/' '{print $2}')"
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "id=$(echo $NAME | tr '[:upper:]' '[:lower:]')"
+
+      - name: Generate wrapper
+        run: |
+          cp .github/scripts/galaxy-wrapper-template.xml galaxy-wrapper.xml
+          sed -i 's/{{{CONTAINER}}}/${{steps.vars.outputs.container}}/g' galaxy-wrapper.xml
+          sed -i 's/{{{SOURCE}}}/${{steps.vars.outputs.source}}/g' galaxy-wrapper.xml
+          sed -i 's/{{{NAME}}}/${{steps.vars.outputs.name}}/g' galaxy-wrapper.xml
+          sed -i 's/{{{ID}}}/${{steps.vars.outputs.id}}/g' galaxy-wrapper.xml
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add galaxy-wrapper.xml
+          git commit -m "Update Galaxy Wrapper $(TZ=EST date '+%Y-%m-%d_%H-%M')"
+          git push
