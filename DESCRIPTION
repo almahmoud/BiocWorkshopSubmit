@@ -17,8 +17,9 @@ Imports:
   gh,
   rjsoncons,
   S4Vectors,
-  shinyjs,
   shiny,
+  shinyjs,
+  shinytoastr,
   utils
 Encoding: UTF-8
 RoxygenNote: 7.2.3

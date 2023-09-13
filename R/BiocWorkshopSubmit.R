@@ -46,6 +46,7 @@ BiocWorkshopSubmit <- function(...) {
     ui <- fluidPage(
         useShinyjs(),
         inlineCSS(appCSS),
+        shinytoastr::useToastr(),
         titlePanel(
             windowTitle = "BiocWorkshop Form",
             title = div(

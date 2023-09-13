@@ -16,9 +16,22 @@ read_gh_file <- function(ghrepo) {
 }
 
 .dcf_parse_url <- function(descfile) {
-    urlfield <- descfile[, "URL"]
+    urlfield <- tryCatch(
+        descfile[, "URL"],
+        error = function(e) {
+            shinytoastr::toastr_warning(
+                "No 'URL' field found in the DESCRIPTION file"
+            )
+            ""
+        }
+    )
     urls <- unlist(strsplit(urlfield, ","))
-    urls[grepl("ghcr|docker", urls)]
+    cont_url <- grepl("ghcr|docker", urls)
+    if (any(cont_url))
+        shinytoastr::toastr_warning(
+            "No container 'URL' found in the DESCRIPTION file"
+        )
+    urls[cont_url]
 }
 
 .parse_description <- function(descfile) {
