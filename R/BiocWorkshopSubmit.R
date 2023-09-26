@@ -219,10 +219,15 @@ BiocWorkshopSubmit <- function(...) {
                 issue_title <- paste0(
                     "[", fdata[["section"]], "] ", fdata[["title"]]
                 )
-                create_gh_issue(
+                response <- create_gh_issue(
                     ghrepo = ghrepo,
                     title = issue_title,
-                    body = gh_comment
+                    body = .INITIAL_GH_COMMENT
+                )
+                add_comment_gh_issue(
+                    ghrepo = ghrepo,
+                    body = gh_comment,
+                    issue_number = response[["number"]]
                 )
                 hide("render_msg")
                 show("thankyou_msg")

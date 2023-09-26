@@ -51,3 +51,15 @@ create_gh_issue <- function(ghrepo, title, body) {
         body = jsonlite::unbox(body)
     )
 }
+
+add_comment_gh_issue <- function(ghrepo, title, body, issue_number) {
+    ghrepo <- unlist(strsplit(ghrepo, "/", fixed = TRUE))
+    names(ghrepo) <- c("owner", "repo")
+    gh(
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
+        owner = ghrepo["owner"],
+        repo = ghrepo["repo"],
+        issue_number = issue_number,
+        body = jsonlite::unbox(body)
+    )
+}
