@@ -1,10 +1,10 @@
-<tool id="interactivetool_biocshiny_" tool_type="interactive" name="BiocWorkshopSubmit" version="0.1">
+<tool id="interactivetool_biocshiny_biocworkshopsubmit" tool_type="interactive" name="BiocWorkshopSubmit" version="0.1">
     <description>BiocWorkshopSubmit BiocShiny App</description>
     <requirements>
         <container type="docker">ghcr.io/almahmoud/biocworkshopsubmit:devel</container>
     </requirements>
     <entry_points>
-        <entry_point name="" requires_domain="True">
+        <entry_point name="biocworkshopsubmit" requires_domain="True">
             <port>3838</port>
         </entry_point>
     </entry_points>
