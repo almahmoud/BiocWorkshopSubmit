@@ -6,7 +6,7 @@
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
     'startfile="{{startfile}}"', 'source="https://github.com/{{ghrepo}}"',
-    'docker="{{url}}:{{tag}}"'
+    'docker="{{url}}:{{tag}}"', 'pkglist="{{pkglist}}"', 'vignettes="{{vignettes}}"'
 )
 
 .ISSUE_GH_REPO <- "Bioconductor/workshop-contributions"
@@ -43,9 +43,9 @@ appCSS <- paste(
 #'
 #' @export
 BiocWorkshopSubmit <- function(...) {
-    fieldsMandatory <- c("id", "title", "section", "ghrepo", "url")
+    fieldsMandatory <- c("id", "title", "section")
     fieldsAll <- c("id", "title", "description", "section",
-        "startfile", "ghrepo", "url", "tag")
+        "startfile", "ghrepo", "url", "tag", "pkglist", "vignettes")
     ui <- fluidPage(
         useShinyjs(),
         inlineCSS(appCSS),
@@ -62,12 +62,78 @@ BiocWorkshopSubmit <- function(...) {
                    "Bioconductor Workshop Submission Form")
             )
         ),
-        tabsetPanel(
-            tabPanel(
-                title = h4("Form"),
-                sidebarLayout(
-                    div(class = "sidebar",
-                        sidebarPanel(
+        sidebarLayout(
+            div(class = "sidebar",
+                sidebarPanel(
+                    div(
+                        id = "prepop",
+                        textInput(
+                            inputId = "prepop",
+                            label = "Existing GitHub Repository",
+                            placeholder = "username/repository"
+                        ),
+                        actionButton(
+                            "presubmit", "Populate", class = "btn-primary"
+                        )
+                    ),
+                    br(),
+                    div(
+                        id = "form",
+                        textInput(
+                            "id",
+                            mandatory("Workshop ID"),
+                            placeholder = "abc123"
+                        ),
+                        textInput(
+                            "title",
+                            label = mandatory("Title"),
+                            placeholder = "A Bioconductor Workshop Title"
+                        ),
+                        textInput(
+                            "section",
+                            label = mandatory("Section"),
+                            placeholder = "BioC2023"
+                        ),
+                        ## TODO: point out workshop.bioconductor.org examples
+                        textInput("description", "Description"),
+                        textInput(
+                            "ghrepo",
+                            "GitHub Repository",
+                            placeholder = "username/repository"
+                        ),
+                        textInput(
+                            "startfile", "Start File", value = "README.md"
+                        ),
+                        textInput(
+                            "url",
+                            "Container URL",
+                            placeholder = "ghcr.io/username/repo"
+                        ),
+                        textInput("tag", "Container Tag", placeholder = "latest"),
+                        textInput("pkglist", "List of packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
+                        textInput("vignettes", "List of vignettes to add to container", placeholder="'vignettes/workshop.Rmd,vignettes/workshop2.Rmd' in source repository OR a url list eg: 'https://gist.githubusercontent.com/example/20823a9e7123cc/raw/1a8ec84131286a47926237089de6/workshop.Rmd,https://raw.githubusercontent.com/example/myworkshop/devel/vignettes/workshop2.Rmd'"),
+                        actionButton("render", "Render", class = "btn-primary")
+                    ),
+                    hidden(
+                        div(
+                            id = "render_msg",
+                            h3("Review the GitHub issue comment on the right"),
+                            actionButton(
+                                "post", "Create Issue", icon("paper-plane"),
+                                style = .ISSUE_BTN_CSS,
+                                class = "btn-danger"
+                            )
+                        )
+                    ),
+                    hidden(
+                        div(
+                            id = "thankyou_msg",
+                            h3("Submitted successfully!")
+                        )
+                    ),
+                    hidden(
+                        span(id = "submit_msg", "Submitting..."),
+                        div(id = "error",
                             div(
                                 id = "prepop",
                                 textInput(
