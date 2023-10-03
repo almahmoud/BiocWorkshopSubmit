@@ -18,6 +18,7 @@ Imports:
   rjsoncons,
   S4Vectors,
   shiny,
+  shinyAce,
   shinyjs,
   shinytoastr,
   utils
