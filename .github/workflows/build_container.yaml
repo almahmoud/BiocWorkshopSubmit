@@ -45,7 +45,7 @@ jobs:
           echo "source=https://github.com/${{github.repository}}" >> $GITHUB_OUTPUT
           NAME="$(echo '${{github.repository}}' | awk -F'/' '{print $2}')"
           echo "name=$NAME" >> $GITHUB_OUTPUT
-          echo "id=$(echo $NAME | tr '[:upper:]' '[:lower:]')"
+          echo "id=$(echo $NAME | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
       - name: Generate wrapper
         run: |
