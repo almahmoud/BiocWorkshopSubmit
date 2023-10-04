@@ -1,7 +1,7 @@
 <tool id="interactivetool_biocshiny_biocworkshopsubmit" tool_type="interactive" name="BiocWorkshopSubmit" version="0.1">
     <description>BiocWorkshopSubmit BiocShiny App</description>
     <requirements>
-        <container type="docker">ghcr.io/almahmoud/biocworkshopsubmit:devel</container>
+        <container type="docker">ghcr.io/almahmoud/biocworkshopsubmit:more-options</container>
     </requirements>
     <entry_points>
         <entry_point name="biocworkshopsubmit" requires_domain="True">
