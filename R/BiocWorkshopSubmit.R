@@ -4,7 +4,7 @@
 .TEMPLATE_FORM <- c(
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
-    'startfile="{{startfile}}"', 'source="{{ghrepo}}"',
+    'startfile="{{startfile}}"', 'source="https://github.com/{{ghrepo}}"',
     'docker="{{url}}:{{tag}}"'
 )
 
