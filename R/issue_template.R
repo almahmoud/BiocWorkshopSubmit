@@ -1,4 +1,4 @@
-.INITIAL_GH_COMMENT <- "
+.INITIAL_GH_COMMENT_TEMP <- "
 **DO NOT INCLUDE REQUESTS IN THE FIRST COMMENT.**
 **PLEASE POST THIS TEMPLATE UNCHANGED THEN FOLLOW ITS INSTRUCTIONS IN A NEW
 COMMENT**
@@ -25,4 +25,13 @@ written on the first line of the comment, in a single line.
 ```
 
 Note. The example `/request` is on multiple lines for readability.
+
+## Additional Workshop Information
+
+Expected Number of Participants: {{wnpart}}
+
+Workshop Date(s): {{wdate}}
+
+Workshop Start Time (approx.): {{wtime}}
+
 "

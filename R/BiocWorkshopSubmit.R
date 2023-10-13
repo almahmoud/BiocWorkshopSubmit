@@ -10,9 +10,9 @@
 
 .ISSUE_GH_REPO <- "Bioconductor/workshop-contributions"
 
-.workshop_template <- function(.data, sep = "\n") {
+.workshop_template <- function(.data, sep = "\n", template = .TEMPLATE_FORM) {
     whisker::whisker.render(
-        paste(.TEMPLATE_FORM, collapse = sep),
+        paste(template, collapse = sep),
         data = .data
     )
 }
@@ -109,6 +109,30 @@ BiocWorkshopSubmit <- function(...) {
                         textInput("tag", "Container Tag", value = "latest"),
                         actionButton("render", "Render", class = "btn-primary")
                     ),
+                    hr(),
+                    div(
+                        id = "additional",
+                        dateRangeInput(
+                            "wdate",
+                            label = "Workshop Date",
+                            format = "yyyy-mm-dd",
+                        ),
+                        shinyTime::timeInput(
+                            "wtime",
+                            label = "Approx. Workshop Time (24h format)",
+                            value = Sys.time(),
+                            seconds = FALSE,
+                            minute.steps = 15
+                        ),
+                        numericInput(
+                            "wnpart",
+                            label = "Expected Number of Participants",
+                            value = 0,
+                            min = 0,
+                            max = 100,
+                            step = 5
+                        )
+                    ),
                     hidden(
                         div(
                             id = "render_msg",
@@ -134,7 +158,7 @@ BiocWorkshopSubmit <- function(...) {
                             )
                         )
                     ),
-                    width = 5
+                    width = 4
                 )
             ),
             mainPanel(
@@ -179,6 +203,17 @@ BiocWorkshopSubmit <- function(...) {
                 stop("Provide a valid and unique identifier (id)")
             resform
         })
+        addFields <- c("wdate", "wtime", "wnpart")
+        names(addFields) <- addFields
+        addData <- reactive({
+            adat <- lapply(addFields, function(x) input[[x]])
+            adat[["wdate"]] <- paste(
+                format(adat[["wdate"]][[1L]], "%B %d, %Y"), "-",
+                format(adat[["wdate"]][[2L]], "%B %d, %Y")
+            )
+            adat[["wtime"]] <- format(adat[["wtime"]], "%H:%M")
+            as.data.frame(adat)
+        })
         output$ace_input <- renderUI({
             aceEditor(
                 outputId = "code",
@@ -219,10 +254,14 @@ BiocWorkshopSubmit <- function(...) {
                 issue_title <- paste0(
                     "[", fdata[["section"]], "] ", fdata[["title"]]
                 )
+                adata <- addData()
+                init_gh_comment <- .workshop_template(
+                    .data = adata, template = .INITIAL_GH_COMMENT_TEMP
+                )
                 response <- create_gh_issue(
                     ghrepo = ghrepo,
                     title = issue_title,
-                    body = .INITIAL_GH_COMMENT
+                    body = init_gh_comment
                 )
                 add_comment_gh_issue(
                     ghrepo = ghrepo,
