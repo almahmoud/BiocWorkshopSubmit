@@ -74,7 +74,7 @@ The app can be launched with the following command:
 BiocWorkshopSubmit::BiocWorkshopSubmit()
 ```
 
-![BiocWorkshopSubmit Interface](BiocWorkshopSubmit_interface.png)
+![BiocWorkshopSubmit Interface](https://raw.githubusercontent.com/Bioconductor/BiocWorkshopSubmit/devel/vignettes/BiocWorkshopSubmit_interface.png)
 
 The app will prompt the presenter to submit the following information:
 
@@ -94,7 +94,7 @@ on GitHub to update the fields in the app.
 
 ### Additional Information
 
-![Additional Information](AdditionalInformation.png)
+![Additional Information](https://raw.githubusercontent.com/Bioconductor/BiocWorkshopSubmit/devel/vignettes/AdditionalInformation.png)
 
 Workshop presenters can also provide additional information regarding the size,
 start time, and date of the workshop. This information will be used to allocate
