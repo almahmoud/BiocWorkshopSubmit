@@ -38,6 +38,8 @@ appCSS <- paste(
 #'   disable enable html
 #' @importFrom shinyAce aceEditor updateAceEditor
 #'
+#' @param ... Arguments passed to \code{\link{shinyApp}}
+#'
 #' @export
 BiocWorkshopSubmit <- function(...) {
     fieldsMandatory <- c("id", "title", "section", "ghrepo", "url")

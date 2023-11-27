@@ -6,6 +6,9 @@
 \usage{
 BiocWorkshopSubmit(...)
 }
+\arguments{
+\item{...}{Arguments passed to \code{\link{shinyApp}}}
+}
 \description{
 Prepare a Bioconductor Workshop Submission
 }
