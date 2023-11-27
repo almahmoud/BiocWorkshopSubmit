@@ -249,22 +249,29 @@ BiocWorkshopSubmit <- function(...) {
             )
         })
         observeEvent(input$post, {
-            tryCatch({
-                fdata <- formData()
-                gh_comment <- .workshop_template(.data = fdata, sep = " ")
-                ghrepo <- .ISSUE_GH_REPO
-                issue_title <- paste0(
-                    "[", fdata[["section"]], "] ", fdata[["title"]]
-                )
-                adata <- addData()
-                init_gh_comment <- .workshop_template(
-                    .data = adata, template = .INITIAL_GH_COMMENT_TEMP
-                )
-                response <- create_gh_issue(
+            fdata <- formData()
+            gh_comment <- .workshop_template(.data = fdata, sep = " ")
+            ghrepo <- .ISSUE_GH_REPO
+            issue_title <- paste0(
+                "[", fdata[["section"]], "] ", fdata[["title"]]
+            )
+            adata <- addData()
+            init_gh_comment <- .workshop_template(
+                .data = adata, template = .INITIAL_GH_COMMENT_TEMP
+            )
+            response <- tryCatch({
+                create_gh_issue(
                     ghrepo = ghrepo,
                     title = issue_title,
                     body = init_gh_comment
                 )
+            }, error = function(e) {
+                html("error_msg", e$message)
+                show(id = "error", anim = TRUE, animType = "fade")
+            })
+            tryCatch({
+                if (is.null(response))
+                    stop("Issue not created; check 'gitcreds::gitcreds_get()'")
                 add_comment_gh_issue(
                     ghrepo = ghrepo,
                     body = gh_comment,
