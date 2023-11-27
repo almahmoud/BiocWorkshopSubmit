@@ -12,15 +12,17 @@ Description: The package provides a form interface for submitting workshops
   package creates an issue and comments with the appropriate data from the
   form.
 License: Artistic-2.0
+Depends: shiny
 Imports:
   BiocBaseUtils,
   gh,
+  jsonlite,
   rjsoncons,
-  S4Vectors,
-  shiny,
+  shinyAce,
   shinyjs,
   shinytoastr,
   shinyTime,
-  utils
+  utils,
+  whisker
 Encoding: UTF-8
 RoxygenNote: 7.2.3

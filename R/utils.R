@@ -34,12 +34,14 @@ read_gh_file <- function(ghrepo) {
     urls[cont_url]
 }
 
+#' @importFrom utils head
 .parse_description <- function(descfile) {
     description <- descfile[, "Description"]
     description <- gsub("\n", " ", description)
     head(strsplit(description, "\\.")[[1L]], 1L)
 }
 
+#' @importFrom jsonlite unbox
 create_gh_issue <- function(ghrepo, title, body) {
     ghrepo <- unlist(strsplit(ghrepo, "/", fixed = TRUE))
     names(ghrepo) <- c("owner", "repo")
@@ -47,8 +49,8 @@ create_gh_issue <- function(ghrepo, title, body) {
         "POST /repos/{owner}/{repo}/issues",
         owner = ghrepo["owner"],
         repo = ghrepo["repo"],
-        title = jsonlite::unbox(title),
-        body = jsonlite::unbox(body)
+        title = unbox(title),
+        body = unbox(body)
     )
 }
 
@@ -60,6 +62,6 @@ add_comment_gh_issue <- function(ghrepo, title, body, issue_number) {
         owner = ghrepo["owner"],
         repo = ghrepo["repo"],
         issue_number = issue_number,
-        body = jsonlite::unbox(body)
+        body = unbox(body)
     )
 }
