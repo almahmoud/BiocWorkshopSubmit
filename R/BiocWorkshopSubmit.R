@@ -2,6 +2,7 @@
 # https://deanattali.com/2015/06/14/mimicking-google-form-shiny/
 
 .TEMPLATE_FORM <- c(
+    '## READ ONLY: DO NOT EDIT ##',
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
     'startfile="{{startfile}}"', 'source="{{ghrepo}}"',
@@ -61,115 +62,121 @@ BiocWorkshopSubmit <- function(...) {
                    "Bioconductor Workshop Submission Form")
             )
         ),
-        sidebarLayout(
-            div(class = "sidebar",
-                sidebarPanel(
-                    div(
-                        id = "prepop",
-                        textInput(
-                            inputId = "prepop",
-                            label = "Existing GitHub Repository",
-                            placeholder = "username/repository"
-                        ),
-                        actionButton(
-                            "presubmit", "Populate", class = "btn-primary"
-                        )
-                    ),
-                    br(),
-                    div(
-                        id = "form",
-                        textInput(
-                            "id",
-                            mandatory("Workshop ID"),
-                            placeholder = "abc123"
-                        ),
-                        textInput(
-                            "title",
-                            label = mandatory("Title"),
-                            placeholder = "A Bioconductor Workshop Title"
-                        ),
-                        textInput(
-                            "section",
-                            label = mandatory("Section"),
-                            placeholder = "BioC2023"
-                        ),
-                        ## TODO: point out workshop.bioconductor.org examples
-                        textInput("description", "Description"),
-                        textInput(
-                            "ghrepo",
-                            label = mandatory("GitHub Repository"),
-                            placeholder = "username/repository"
-                        ),
-                        textInput(
-                            "startfile", "Start File", value = "README.md"
-                        ),
-                        textInput(
-                            "url",
-                            label = mandatory("Container URL"),
-                            placeholder = "ghcr.io/username/repo"
-                        ),
-                        textInput("tag", "Container Tag", value = "latest"),
-                        actionButton("render", "Render", class = "btn-primary")
-                    ),
-                    hr(),
-                    div(
-                        id = "additional",
-                        dateRangeInput(
-                            "wdate",
-                            label = "Workshop Date",
-                            format = "yyyy-mm-dd",
-                        ),
-                        shinyTime::timeInput(
-                            "wtime",
-                            label = "Approx. Workshop Time (24h format)",
-                            value = Sys.time(),
-                            seconds = FALSE,
-                            minute.steps = 15
-                        ),
-                        numericInput(
-                            "wnpart",
-                            label = "Expected Number of Participants",
-                            value = 0,
-                            min = 0,
-                            max = 100,
-                            step = 5
-                        )
-                    ),
-                    hidden(
-                        div(
-                            id = "render_msg",
-                            h3("Review the GitHub issue comment on the right"),
-                            actionButton(
-                                "post", "Create Issue", icon("paper-plane"),
-                                style = .ISSUE_BTN_CSS,
-                                class = "btn-danger"
-                            )
-                        )
-                    ),
-                    hidden(
-                        div(
-                            id = "thankyou_msg",
-                            h3("Submitted successfully!")
-                        )
-                    ),
-                    hidden(
-                        span(id = "submit_msg", "Submitting..."),
-                        div(id = "error",
+        tabsetPanel(
+            tabPanel(
+                title = h4("Form"),
+                sidebarLayout(
+                    div(class = "sidebar",
+                        sidebarPanel(
                             div(
-                                br(), tags$b("Error: "), span(id = "error_msg")
-                            )
+                                id = "prepop",
+                                textInput(
+                                    inputId = "prepop",
+                                    label = "Existing GitHub Repository",
+                                    placeholder = "username/repository"
+                                ),
+                                actionButton(
+                                    "presubmit", "Populate", class = "btn-primary"
+                                )
+                            ),
+                            br(),
+                            div(
+                                id = "form",
+                                textInput(
+                                    "id",
+                                    mandatory("Workshop ID"),
+                                    placeholder = "abc123"
+                                ),
+                                textInput(
+                                    "title",
+                                    label = mandatory("Title"),
+                                    placeholder = "A Bioconductor Workshop Title"
+                                ),
+                                textInput(
+                                    "section",
+                                    label = mandatory("Section"),
+                                    placeholder = "BioC2023"
+                                ),
+                                ## TODO: point out workshop.bioconductor.org examples
+                                textInput("description", "Description"),
+                                textInput(
+                                    "ghrepo",
+                                    label = mandatory("GitHub Repository"),
+                                    placeholder = "username/repository"
+                                ),
+                                textInput(
+                                    "startfile", "Start File", value = "README.md"
+                                ),
+                                textInput(
+                                    "url",
+                                    label = mandatory("Container URL"),
+                                    placeholder = "ghcr.io/username/repo"
+                                ),
+                                textInput("tag", "Container Tag", value = "latest"),
+                                actionButton("render", "Render", class = "btn-primary")
+                            ),
+                            hr(),
+                            div(
+                                id = "additional",
+                                dateRangeInput(
+                                    "wdate",
+                                    label = "Workshop Date",
+                                    format = "yyyy-mm-dd",
+                                ),
+                                shinyTime::timeInput(
+                                    "wtime",
+                                    label = "Approx. Workshop Time (24h format)",
+                                    value = Sys.time(),
+                                    seconds = FALSE,
+                                    minute.steps = 15
+                                ),
+                                numericInput(
+                                    "wnpart",
+                                    label = "Expected Number of Participants",
+                                    value = 0,
+                                    min = 0,
+                                    max = 100,
+                                    step = 5
+                                )
+                            ),
+                            hidden(
+                                div(
+                                    id = "render_msg",
+                                    h3("Review the GitHub issue comment on the right"),
+                                    actionButton(
+                                        "post", "Create Issue", icon("paper-plane"),
+                                        style = .ISSUE_BTN_CSS,
+                                        class = "btn-danger"
+                                    )
+                                )
+                            ),
+                            hidden(
+                                div(
+                                    id = "thankyou_msg",
+                                    h3("Submitted successfully!")
+                                )
+                            ),
+                            hidden(
+                                span(id = "submit_msg", "Submitting..."),
+                                div(id = "error",
+                                    div(
+                                        br(), tags$b("Error: "), span(id = "error_msg")
+                                    )
+                                )
+                            ),
+                            width = 4
                         )
                     ),
-                    width = 4
-                )
-            ),
-            mainPanel(
-                fluidRow(
-                    uiOutput("ace_input")
-                ),
-                width = 6
-            )
-        ) # end sidebarLayout
+                    mainPanel(
+                        fluidRow(
+                            uiOutput("ace_input")
+                        ),
+                        width = 6
+                    )
+                ) # end sidebarLayout
+            ), # end tabPanel
+            tabPanel(title = h4("About"), aboutPanel(), value = "about")
+        ) # end tabsetPanel
     ) # end fluidPage
 
     server <- function(input, output, session) {
@@ -283,6 +290,12 @@ BiocWorkshopSubmit <- function(...) {
                 html("error_msg", e$message)
                 show(id = "error", anim = TRUE, animType = "fade")
             })
+        })
+        output$sessioninfo <- renderPrint({
+            if (requireNamespace("sessioninfo", quietly = TRUE))
+                utils::capture.output(sessioninfo::session_info())
+            else
+                utils::capture.output(utils::sessionInfo())
         })
     }
 
