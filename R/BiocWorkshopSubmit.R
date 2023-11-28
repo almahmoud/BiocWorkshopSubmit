@@ -5,7 +5,7 @@
     '## READ ONLY: DO NOT EDIT ##',
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
-    'startfile="{{startfile}}"', 'source="{{ghrepo}}"',
+    'startfile="{{startfile}}"', 'source="https://github.com/{{ghrepo}}"',
     'docker="{{url}}:{{tag}}"'
 )
 
