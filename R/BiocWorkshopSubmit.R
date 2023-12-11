@@ -62,78 +62,12 @@ BiocWorkshopSubmit <- function(...) {
                    "Bioconductor Workshop Submission Form")
             )
         ),
-        sidebarLayout(
-            div(class = "sidebar",
-                sidebarPanel(
-                    div(
-                        id = "prepop",
-                        textInput(
-                            inputId = "prepop",
-                            label = "Existing GitHub Repository",
-                            placeholder = "username/repository"
-                        ),
-                        actionButton(
-                            "presubmit", "Populate", class = "btn-primary"
-                        )
-                    ),
-                    br(),
-                    div(
-                        id = "form",
-                        textInput(
-                            "id",
-                            mandatory("Workshop ID"),
-                            placeholder = "abc123"
-                        ),
-                        textInput(
-                            "title",
-                            label = mandatory("Title"),
-                            placeholder = "A Bioconductor Workshop Title"
-                        ),
-                        textInput(
-                            "section",
-                            label = mandatory("Section"),
-                            placeholder = "BioC2023"
-                        ),
-                        ## TODO: point out workshop.bioconductor.org examples
-                        textInput("description", "Description"),
-                        textInput(
-                            "ghrepo",
-                            "GitHub Repository",
-                            placeholder = "username/repository"
-                        ),
-                        textInput(
-                            "startfile", "Start File", value = "README.md"
-                        ),
-                        textInput(
-                            "url",
-                            "Container URL",
-                            placeholder = "ghcr.io/username/repo"
-                        ),
-                        textInput("tag", "Container Tag", placeholder = "latest"),
-                        textInput("pkglist", "List of packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
-                        textInput("vignettes", "List of vignettes to add to container", placeholder="'vignettes/workshop.Rmd,vignettes/workshop2.Rmd' in source repository OR a url list eg: 'https://gist.githubusercontent.com/example/20823a9e7123cc/raw/1a8ec84131286a47926237089de6/workshop.Rmd,https://raw.githubusercontent.com/example/myworkshop/devel/vignettes/workshop2.Rmd'"),
-                        actionButton("render", "Render", class = "btn-primary")
-                    ),
-                    hidden(
-                        div(
-                            id = "render_msg",
-                            h3("Review the GitHub issue comment on the right"),
-                            actionButton(
-                                "post", "Create Issue", icon("paper-plane"),
-                                style = .ISSUE_BTN_CSS,
-                                class = "btn-danger"
-                            )
-                        )
-                    ),
-                    hidden(
-                        div(
-                            id = "thankyou_msg",
-                            h3("Submitted successfully!")
-                        )
-                    ),
-                    hidden(
-                        span(id = "submit_msg", "Submitting..."),
-                        div(id = "error",
+        tabsetPanel(
+            tabPanel(
+                title = h4("Form"),
+                sidebarLayout(
+                    div(class = "sidebar",
+                        sidebarPanel(
                             div(
                                 id = "prepop",
                                 textInput(
@@ -167,18 +101,20 @@ BiocWorkshopSubmit <- function(...) {
                                 textInput("description", "Description"),
                                 textInput(
                                     "ghrepo",
-                                    label = mandatory("GitHub Repository"),
-                                    placeholder = "username/repository"
+                                    label = "Git Repository",
+                                    placeholder = "https://github.com/username/repository"
                                 ),
                                 textInput(
                                     "startfile", "Start File", value = "README.md"
                                 ),
                                 textInput(
                                     "url",
-                                    label = mandatory("Container URL"),
+                                    label = "Container URL",
                                     placeholder = "ghcr.io/username/repo"
                                 ),
-                                textInput("tag", "Container Tag", value = "latest"),
+                                textInput("tag", "Container Tag", placeholder = "devel"),
+                                textInput("pkglist", "List of packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
+                                textInput("vignettes", "List of vignettes to add to container", placeholder="'vignettes/workshop.Rmd,vignettes/workshop2.Rmd' in source repository OR a url list eg: 'https://gist.githubusercontent.com/example/20823a9e7123cc/raw/1a8ec84131286a47926237089de6/workshop.Rmd,https://raw.githubusercontent.com/example/myworkshop/devel/vignettes/workshop2.Rmd'"),
                                 actionButton("render", "Render", class = "btn-primary")
                             ),
                             hr(),
