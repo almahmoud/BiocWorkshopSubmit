@@ -1,7 +1,7 @@
 Package: BiocWorkshopSubmit
 Type: Package
 Title: Provides a shiny app for workshop submissions
-Version: 0.99.8
+Version: 0.99.9
 Authors@R: person(
   "Marcel", "Ramos", , "marcel.ramosperez@roswellpark.org",
   c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
