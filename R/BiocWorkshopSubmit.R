@@ -101,7 +101,7 @@ BiocWorkshopSubmit <- function(...) {
                                 textInput("description", "Description"),
                                 textInput(
                                     "ghrepo",
-                                    label = "Git Repository",
+                                    label = "GitHub Repository",
                                     placeholder = "https://github.com/username/repository"
                                 ),
                                 textInput(
@@ -113,8 +113,8 @@ BiocWorkshopSubmit <- function(...) {
                                     placeholder = "ghcr.io/username/repo"
                                 ),
                                 textInput("tag", "Container Tag", placeholder = "devel"),
-                                textInput("pkglist", "List of packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
-                                textInput("vignettes", "List of vignettes to add to container", placeholder="'vignettes/workshop.Rmd,vignettes/workshop2.Rmd' in source repository OR a url list eg: 'https://gist.githubusercontent.com/example/20823a9e7123cc/raw/1a8ec84131286a47926237089de6/workshop.Rmd,https://raw.githubusercontent.com/example/myworkshop/devel/vignettes/workshop2.Rmd'"),
+                                textInput("pkglist", "Packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
+                                textInput("vignettes", "Vignettes to add to container (comma sep.)", placeholder="Relative paths to vignettes or URL list e.g., vignettes/workshop.Rmd OR https://gist.githubusercontent.com/user/repo/vignettes/workshop.Rmd"),
                                 actionButton("render", "Render", class = "btn-primary")
                             ),
                             hr(),
