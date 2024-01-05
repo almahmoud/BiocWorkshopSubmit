@@ -5,7 +5,7 @@
     '## READ ONLY: DO NOT EDIT ##',
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
-    'startfile="{{startfile}}"', 'source="https://github.com/{{ghrepo}}"',
+    'startfile="{{startfile}}"', 'source="{{gitrepo}}"',
     'docker="{{url}}:{{tag}}"', 'pkglist="{{pkglist}}"', 'vignettes="{{vignettes}}"'
 )
 
@@ -45,7 +45,7 @@ appCSS <- paste(
 BiocWorkshopSubmit <- function(...) {
     fieldsMandatory <- c("id", "title", "section")
     fieldsAll <- c("id", "title", "description", "section",
-        "startfile", "ghrepo", "url", "tag", "pkglist", "vignettes")
+        "startfile", "gitrepo", "url", "tag", "pkglist", "vignettes")
     ui <- fluidPage(
         useShinyjs(),
         inlineCSS(appCSS),
@@ -100,8 +100,8 @@ BiocWorkshopSubmit <- function(...) {
                                 ## TODO: point out workshop.bioconductor.org examples
                                 textInput("description", "Description"),
                                 textInput(
-                                    "ghrepo",
-                                    label = "GitHub Repository",
+                                    "gitrepo",
+                                    label = "Git Repository",
                                     placeholder = "https://github.com/username/repository"
                                 ),
                                 textInput(
@@ -183,9 +183,9 @@ BiocWorkshopSubmit <- function(...) {
 
     server <- function(input, output, session) {
         observeEvent(input$presubmit, {
-            ghrepo <- input[["prepop"]]
-            updateTextInput(session, "ghrepo", value = ghrepo)
-            descfile <- read_gh_file(ghrepo)
+            gitrepo <- paste0("https://github.com/", input[["prepop"]])
+            updateTextInput(session, "gitrepo", value = gitrepo)
+            descfile <- read_gh_file(input[["prepop"]])
             title <- descfile[, "Title"]
             updateTextInput(session, "title", value = unname(title))
             description <- .parse_description(descfile)
