@@ -55,7 +55,7 @@ create_gh_issue <- function(ghrepo, title, body) {
 }
 
 add_comment_gh_issue <- function(ghrepo, title, body, issue_number) {
-    ghrepo <- unlist(strsplit(ghrepo, "/", fixed = TRUE))
+    ghrepo <- tail(unlist(strsplit(ghrepo, "/", fixed = TRUE)), 2L)
     names(ghrepo) <- c("owner", "repo")
     gh(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",

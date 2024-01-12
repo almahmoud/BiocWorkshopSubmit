@@ -5,7 +5,7 @@
     '## READ ONLY: DO NOT EDIT ##',
     '/request', 'id="{{id}}"', 'title="{{title}}"',
     'description="{{description}}"', 'section="{{section}}"',
-    'startfile="{{startfile}}"', 'source="https://github.com/{{ghrepo}}"',
+    'startfile="{{startfile}}"', 'source="{{gitrepo}}"',
     'docker="{{url}}:{{tag}}"', 'pkglist="{{pkglist}}"', 'vignettes="{{vignettes}}"'
 )
 
@@ -45,7 +45,7 @@ appCSS <- paste(
 BiocWorkshopSubmit <- function(...) {
     fieldsMandatory <- c("id", "title", "section")
     fieldsAll <- c("id", "title", "description", "section",
-        "startfile", "ghrepo", "url", "tag", "pkglist", "vignettes")
+        "startfile", "gitrepo", "url", "tag", "pkglist", "vignettes")
     ui <- fluidPage(
         useShinyjs(),
         inlineCSS(appCSS),
@@ -100,7 +100,7 @@ BiocWorkshopSubmit <- function(...) {
                                 ## TODO: point out workshop.bioconductor.org examples
                                 textInput("description", "Description"),
                                 textInput(
-                                    "ghrepo",
+                                    "gitrepo",
                                     label = "Git Repository",
                                     placeholder = "https://github.com/username/repository"
                                 ),
@@ -113,8 +113,8 @@ BiocWorkshopSubmit <- function(...) {
                                     placeholder = "ghcr.io/username/repo"
                                 ),
                                 textInput("tag", "Container Tag", placeholder = "devel"),
-                                textInput("pkglist", "List of packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
-                                textInput("vignettes", "List of vignettes to add to container", placeholder="'vignettes/workshop.Rmd,vignettes/workshop2.Rmd' in source repository OR a url list eg: 'https://gist.githubusercontent.com/example/20823a9e7123cc/raw/1a8ec84131286a47926237089de6/workshop.Rmd,https://raw.githubusercontent.com/example/myworkshop/devel/vignettes/workshop2.Rmd'"),
+                                textInput("pkglist", "Packages to pre-install", placeholder="S4Vectors,username/repo,GenomicRanges"),
+                                textInput("vignettes", "Vignettes to add to container (comma sep.)", placeholder="Relative paths to vignettes or URL list e.g., vignettes/workshop.Rmd OR https://gist.githubusercontent.com/user/repo/vignettes/workshop.Rmd"),
                                 actionButton("render", "Render", class = "btn-primary")
                             ),
                             hr(),
@@ -183,9 +183,9 @@ BiocWorkshopSubmit <- function(...) {
 
     server <- function(input, output, session) {
         observeEvent(input$presubmit, {
-            ghrepo <- input[["prepop"]]
-            updateTextInput(session, "ghrepo", value = ghrepo)
-            descfile <- read_gh_file(ghrepo)
+            gitrepo <- paste0("https://github.com/", input[["prepop"]])
+            updateTextInput(session, "gitrepo", value = gitrepo)
+            descfile <- read_gh_file(input[["prepop"]])
             title <- descfile[, "Title"]
             updateTextInput(session, "title", value = unname(title))
             description <- .parse_description(descfile)
